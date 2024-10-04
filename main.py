@@ -43,7 +43,7 @@ def run():
         # Emailing the CSV files
         sender_email = 'towerslist@gmail.com'
         sender_password = 'zeeu qkwv cewp uent'
-        receiver_email = 'deals@hilton-global.com'
+        receiver_email = 'contact@smartlancedesigns.com'
         subject = 'New Listing Update'
         body = 'Please find both CSV files attached.'
 
