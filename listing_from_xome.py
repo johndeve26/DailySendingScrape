@@ -63,23 +63,46 @@ class XomeListings:
         return search_terms
 
     def set_property_filter_to_default(self):
-        # Click filter button
-        click_filter = self.wait.until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, '[id="ddbtn-label-filters"]'))
-        )
-        click_filter.click()
+        try:
+            # Click filter button
+            click_filter = self.wait.until(
+                EC.element_to_be_clickable((By.CSS_SELECTOR, '[id="ddbtn-label-filters"]'))
+            )
+            click_filter.click()
 
-        # Uncheck property type checkboxes
-        property_type_box = self.driver.find_element(By.CSS_SELECTOR, '[class="prop-home-type-checkbox"]')
+            # Uncheck property type checkboxes
+            property_type_box = self.driver.find_element(By.CSS_SELECTOR, '[class="prop-home-type-checkbox"]')
 
-        all_active = property_type_box.find_elements(By.XPATH, "//span[contains(@class, 'active')]")
-        if len(all_active) > 0:
-            for each_active in all_active:
-                each_active.click()
+            all_active = property_type_box.find_elements(By.XPATH, "//span[contains(@class, 'active')]")
+            if len(all_active) > 0:
+                for each_active in all_active:
+                    each_active.click()
 
-        # Apply filter
-        apply_filter = self.driver.find_element(By.CSS_SELECTOR, '[id="desktop-apply"]')
-        apply_filter.click()
+            # Apply filter
+            apply_filter = self.driver.find_element(By.CSS_SELECTOR, '[id="desktop-apply"]')
+            apply_filter.click()
+        except:
+            self.driver.refresh()
+            try:
+                # Click filter button
+                click_filter = self.wait.until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, '[id="ddbtn-label-filters"]'))
+                )
+                click_filter.click()
+
+                # Uncheck property type checkboxes
+                property_type_box = self.driver.find_element(By.CSS_SELECTOR, '[class="prop-home-type-checkbox"]')
+
+                all_active = property_type_box.find_elements(By.XPATH, "//span[contains(@class, 'active')]")
+                if len(all_active) > 0:
+                    for each_active in all_active:
+                        each_active.click()
+
+                # Apply filter
+                apply_filter = self.driver.find_element(By.CSS_SELECTOR, '[id="desktop-apply"]')
+                apply_filter.click()
+            except:
+                pass
 
     def set_filter(self, keyword):
 
@@ -137,8 +160,24 @@ class XomeListings:
                     print(f'No new listings found for {keyword}')
                 print('\n')
             except Exception as e:
-                print(e)
                 self.driver.refresh()
+                try:
+                    i += 1
+                    print(f'Checking data for {keyword}: {i}')
+                    self.set_filter(keyword)
+                    time.sleep(2)
+                    all_url = self.get_new_url()
+
+                    # Check if all_url is not None before iterating
+                    if all_url:
+                        for each_url in all_url:
+                            self.save_to_txt(each_url, keyword)
+                        print(f'Data for {keyword} saved')
+                    else:
+                        print(f'No new listings found for {keyword}')
+                    print('\n')
+                except Exception:
+                    pass
 
     def read_from_txt(self, keyword):
         """Reads the main file to retrieve all previously stored entries."""
