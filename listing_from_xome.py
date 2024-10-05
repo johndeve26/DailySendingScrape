@@ -2,9 +2,12 @@ import os
 import time
 from selenium import webdriver
 from selenium.webdriver import ActionChains, Keys
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
+
 
 class XomeListings:
 
@@ -19,7 +22,7 @@ class XomeListings:
         options.add_argument('--disable-search-engine-choice-screen')
         options.add_argument('--disable-extensions')
         options.add_argument('--disable-popup-blocking')
-        options.add_argument('--headless')
+        # options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-infobars')
@@ -46,7 +49,7 @@ class XomeListings:
         options.add_experimental_option('prefs', prefs)
 
         # Initialize WebDriver
-        self.driver = webdriver.Chrome(options=options)
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
         self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         self.driver.get(url)
         self.driver.implicitly_wait(30)

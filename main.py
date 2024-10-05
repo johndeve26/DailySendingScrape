@@ -13,18 +13,17 @@ def run():
     # Generate a unique code
     generated_code = generate_unique_code()
 
+    crexi = CrexiListings('https://www.google.com', f'crexi', generated_code)
     try:
         # Crexi listings operation
-        crexi = CrexiListings('https://www.google.com', f'crexi', generated_code)
         crexi.operate()
     except Exception as e:
         print(f"Error with Crexi listings: {e}")
     finally:
         crexi.close_driver()
 
+    xome = XomeListings('https://www.xome.com/listing/listingsearch.aspx', f'xome', generated_code)
     try:
-        # Xome listings operation
-        xome = XomeListings('https://www.xome.com/listing/listingsearch.aspx', f'xome', generated_code)
         xome.operate()
     except Exception as e:
         print(f"Error with Xome listings: {e}")
@@ -43,6 +42,7 @@ def run():
         # Emailing the CSV files
         sender_email = 'towerslist@gmail.com'
         sender_password = 'zeeu qkwv cewp uent'
+        # receiver_email = 'deals@hilton-global.com'
         receiver_email = 'contact@smartlancedesigns.com'
         subject = 'New Listing Update'
         body = 'Please find both CSV files attached.'

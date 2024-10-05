@@ -1,9 +1,11 @@
 import os
 import time
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class CrexiListings:
@@ -30,7 +32,9 @@ class CrexiListings:
         options.add_experimental_option('useAutomationExtension', False)
 
         # Initialize WebDriver
-        self.driver = webdriver.Chrome(options=options)
+        # self.driver = webdriver.Chrome(options=options)
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
         self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         self.driver.get(url)
         self.driver.implicitly_wait(30)
